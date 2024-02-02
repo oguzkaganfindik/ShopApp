@@ -1,0 +1,5 @@
+-> Controller Servis Metotlarýný Kullanýr.
+
+-> Servis Metotlarý Repository Metotlarýný Kullanýr.
+
+-> Repository DbContext Metotlarýný Kullanýr.
