@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using ShopApp.Business.Managers;
+using ShopApp.Business.Services;
 using ShopApp.Data.Context;
+using ShopApp.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,9 @@ var connectionString = builder.Configuration.GetConnectionString
 
 builder.Services.AddDbContext<ShopAppContext>(options => options.UseSqlServer (connectionString));
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+builder.Services.AddScoped<IUserService, UserManager>();
 
 
 var app = builder.Build();
