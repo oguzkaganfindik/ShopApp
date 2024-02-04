@@ -1,10 +1,12 @@
 ﻿using ShopApp.Business.Dtos;
+using ShopApp.Business.Types;
 
 namespace ShopApp.Business.Services
 {
     public interface IUserService
     {
-        void AddUser(UserAddDto userAddDto);
+        ServiceMessage AddUser(UserAddDto userAddDto);
+        UserInfoDto LoginUser(UserLoginDto userLoginDto);
 
     }
 }
