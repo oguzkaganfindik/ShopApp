@@ -7,7 +7,7 @@
         <div class="d-flex">
             <div class="user-box me-4">
                 <input asp-for=FirstName type="text" required>
-                <label class="required" asp-for="FirstName"></label> 
+                <label class="required" asp-for="FirstName"></label>
             </div>
             <div class="user-box">
                 <input asp-for="LastName" type="text" required>
@@ -29,13 +29,12 @@
                 <label class="required" asp-for="PasswordConfirm"></label>
             </div>
 
-          
+
         </div>
 
 
 
         <div class="text-danger" asp-validation-summary="All">
-
         </div>
 
 
@@ -46,7 +45,39 @@
             <span></span>
             Kayıt Ol
         </button>
-       
+
     </form>
 </div>
 
+@*Section ile RenderBody'i parçalıyorum denilebilir.*@
+@section Scripts {
+    <script>
+        // https://codeseven.github.io/toastr/demo.html
+
+        $(document).ready(function () {
+
+            toastr.options = {
+                'closeButton': false,
+                'debug': false,
+                'newestOnTop': true,
+                'progressBar': false,
+                'positionClass': 'toast-top-center',
+                'preventDuplicates': false,
+                'showDuration': '1000',
+                'hideDuration': '1000',
+                'timeOut': '5000',
+                'extendedTimeOut': '1000',
+                'showEasing': 'swing',
+                'hideEasing': 'linear',
+                'showMethod': 'fadeIn',
+                'hideMethod': 'fadeOut',
+            }
+
+        @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage?.ToString()))
+        {
+            @:toastr.options.closeHtml = '<button class="closebtn"><i class="bi bi-x"></i></button>';
+            @:toastr.error("@ViewBag.ErrorMessage?.ToString()", "Bildirim:");
+        }
+        });
+    </script>
+}
