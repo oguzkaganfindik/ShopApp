@@ -238,11 +238,14 @@
                     var lastName = User.GetUserLastName();
 
                     <div class="d-flex">
-
-                        <div class="ms-3 me-3">
-                            <a class="btn" id="AdminPanelLink">Yönetim Paneli</a>
-                        </div>
-
+                       
+                        @if(User.IsAdmin())
+                        {
+                            <div class="ms-3 me-3">
+                                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn" id="AdminPanelLink">Yönetim Paneli</a>
+                            </div>
+                        }
+                        
                         <div class="fw-bold fst-italic mt-2">
                             Hoş Geldin @firstName @lastName
                         </div>
@@ -318,7 +321,7 @@
 
     </script>
 
-    @await RenderSectionAsync("Scripts", required:false);
+    @await RenderSectionAsync("Scripts", required:false)
 
 
 
