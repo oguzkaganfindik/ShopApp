@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ShopAppContext>(options => options.UseSqlServer (c
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddScoped<IUserService, UserManager>();
+builder.Services.AddScoped<ICategoryService, CategoryManager>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
@@ -31,6 +32,13 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 // Auth iþlemleri yapýyorsam, üstteki 2 satýr yazýlmalý. Yoksa hata vermez fakat oturum açmaz, yetkilendirme sorgulayamaz.
+
+
+// AREA için yazýlan ROUTE her zaman Default'un üzerinde olmalý.
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{Controller=Dashboard}/{Action=Index}/{id?}"
+    );
 
 app.MapControllerRoute(
     name: "Default",
