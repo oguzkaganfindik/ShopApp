@@ -6,5 +6,8 @@ namespace ShopApp.Business.Services
     {
         bool AddCategory(CategoryAddDto categoryAddDto);
         List<CategoryListDto> GetCategories();
+        CategoryUpdateDto GetCategory(int id);
+        bool UpdateCategory(CategoryUpdateDto categoryUpdateDto);
+        void DeleteCategory(int id);
     }
 }

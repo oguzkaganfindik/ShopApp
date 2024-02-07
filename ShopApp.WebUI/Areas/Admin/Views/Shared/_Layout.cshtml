@@ -13,11 +13,11 @@
                 <span class="fs-4">Shop App Yönetim Paneli</span>
             </a>
 
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills fw-bold">
                 <li class="nav-item"><a href="#" class="nav-link" aria-current="page">Kullanıcılar</a></li>
                 <li class="nav-item"><a asp-controller="Category" asp-action="List" class="nav-link">Kategoriler</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Ürünler</a></li>
-                <li class="nav-item"><a href="/" class="btn btn-success fw-bold">Siteye geri dön</a></li>
+                <li class="nav-item"><a asp-controller="Product" asp-action="List" class="nav-link">Ürünler</a></li>
+                <li class="nav-item ms-4"><a href="/" class="btn btn-success fw-bold">Siteye geri dön</a></li>
             </ul>
         </header>
         @RenderBody()

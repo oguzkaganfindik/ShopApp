@@ -34,6 +34,21 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
             return View("Form", new CategoryFormViewModel());
         }
 
+        public IActionResult Update(int id)
+        {
+            var categoryDto = _categoryService.GetCategory(id);
+
+            var viewModel = new CategoryFormViewModel()
+            {
+                Id = categoryDto.Id,
+                Name = categoryDto.Name,
+                Description = categoryDto.Description
+            };
+
+            return View("Form", viewModel);
+        }
+
+
         [HttpPost]
         public IActionResult Save(CategoryFormViewModel formData)
         {
@@ -67,10 +82,30 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
             }
             else // Güncelleme işlemi
             {
-                
+                var categoryUpdateDto = new CategoryUpdateDto()
+                {
+                    Id = formData.Id,
+                    Name = formData.Name,
+                    Description = formData.Description
+                };
+
+                var result = _categoryService.UpdateCategory(categoryUpdateDto);
+
+                if (!result)
+                {
+                    ViewBag.ErrorMessage = "Bu isimde bir kategori zaten mevcut olduğundan, güncelleme yapamazsınız.";
+                    return View("Form", formData);
+                }
+
+                return RedirectToAction("List");
             }
 
-            return Ok(); // Silinecek! sadece save action hata vermesin diye şimdilik eklendi.
+        }
+        public IActionResult Delete(int id)
+        {
+            _categoryService.DeleteCategory(id);
+
+            return RedirectToAction("List");
         }
     }
 }
