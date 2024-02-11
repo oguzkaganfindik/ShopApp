@@ -63,9 +63,15 @@
                     </div>
 
                     <div class="mb-2">
+
                         <label asp-for="File"></label>
                         <input type="File" asp-for="File" class="form-control" />
                         <span class="text-danger fw-bold mt-1" asp-validation-for="File"></span>
+
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.ImagePath))
+                        {
+                            <img class="mt-4" width="200" height="150" src="~/images/products/@ViewBag.ImagePath" />
+                        }
 
                         @if (!string.IsNullOrWhiteSpace(ViewBag.ImageErrorMessage))
                         {
