@@ -1,13 +1,13 @@
-﻿
+﻿@model List<ProductListViewModel>
 
 <div>
     <div class="float-start"> <h2>Ürünler</h2> </div>
-    <div class="float-end"> <a asp-controller="Product" asp-action="New" class="btn btn-warning">Yeni Ürün</a></div>
+    <div class="float-end"> <a asp-controller="Product" asp-action="New" class="btn btn-warning fw-bold">Yeni Ürün</a></div>
 </div>
 
 <div style="padding-top:75px">
 
-    <table class="table">
+    <table id="productTable" class="table table-hover">
         <thead>
             <tr>
                 <th style="width:150px"></th>
@@ -20,12 +20,58 @@
         </thead>
 
         <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.ImagePath))
+                        {
+                            <a href="~/images/noImage.png" data-lightbox="@item.CategoryName" data-title="@item.Name"><img width="140" height="120" src="~/images/noImage.png" /></a>
+                        }
+                        else
+                        {
+                            <a href="~/images/products/@item.ImagePath" data-lightbox="@item.CategoryName" data-title="@item.Name"><img width="140" height="120" src="~/images/products/@item.ImagePath" /></a>
+                        }
+                    </td>
+
+                    <td>@item.Name</td>
+                    <td>@item.UnitPrice TL</td>
+                    <td>@item.UnitsInStock</td>
+                    <td>@item.CategoryName</td>
+
+                    <td>
+                        <a asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Düzenle</a>
+                        <a class="btn btn-sm btn-danger">Sil</a>
+                    </td>
+                </tr>
+            }
         </tbody>
 
 
     </table>
 
 
-
-
 </div>
+
+@section Scripts {
+
+    <script>
+
+        var table = new DataTable('#productTable', {
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/tr.json',
+            },
+            pageLength:3
+        });
+
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true,
+            'fitImagesInViewport': true,
+            'maxWidth': 500,
+            'maxHeight': 500
+        })
+
+    </script>
+
+}

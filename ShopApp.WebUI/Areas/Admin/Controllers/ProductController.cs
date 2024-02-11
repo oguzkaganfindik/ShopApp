@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopApp.Business.Dtos;
 using ShopApp.Business.Services;
 using ShopApp.WebUI.Areas.Admin.Models;
 
@@ -11,21 +12,56 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        private readonly IWebHostEnvironment _environment;
+        public ProductController(IProductService productService, ICategoryService categoryService, IWebHostEnvironment environment)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _environment = environment;
         }
 
         public IActionResult List()
         {
-            return View();
+            var productDtoList = _productService.GetProducts();
+
+            var viewModel = productDtoList.Select(x => new ProductListViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UnitPrice = x.UnitPrice,
+                UnitsInStock = x.UnitInStock,
+                CategoryName = x.CategoryName,
+                ImagePath = x.ImagePath
+
+            }).ToList();
+
+            return View(viewModel);
         }
 
         public IActionResult New()
         {
             ViewBag.Categories = _categoryService.GetCategories();
             return View("Form", new ProductFormViewModel());
+        }
+
+        public IActionResult Update(int id)
+        {
+            var updateProductDto = _productService.GetProductById(id);
+
+            var viewModel = new ProductFormViewModel()
+            {
+                Id = updateProductDto.Id,
+                Name = updateProductDto.Name,
+                Description = updateProductDto.Description,
+                UnitPrice = updateProductDto.UnitPrice,
+                UnitInStock = updateProductDto.UnitsInStock,
+                CategoryId = updateProductDto.CategoryId,
+            };
+
+            ViewBag.ImagePath = updateProductDto.ImagePath;
+
+            ViewBag.Categories = _categoryService.GetCategories();
+            return View("Form", viewModel);
         }
 
         public IActionResult Save(ProductFormViewModel formData)
@@ -63,7 +99,46 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
                 newFileName = fileNameWithoutExtension + "-" + Guid.NewGuid() + fileExtension;
                 // Aynı isimde iki tane dosya yüklediğimizde hata almamak için her dosyayı birbiriyle asla eşleşmeyecek şekilde isimlendiriyorum. Guid : unique bir string verir.
 
+                // Bu aşamadan sonra görseli yükleyeceğim adresi ayarlıyorum.
 
+                var folderPath = Path.Combine("images", "products");
+                // images/products
+
+                var wwwrootFolderPath = Path.Combine(_environment.WebRootPath, folderPath);
+                // .../wwwroot/images/products
+
+                var filePath = Path.Combine(wwwrootFolderPath, newFileName);
+                // .../wwwroot/images/products/urunGorsel-123123adwaw13daw.jpg
+
+                Directory.CreateDirectory(wwwrootFolderPath); // wwwroot/images/products klasörü yoksa oluştur.
+
+                using(var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    formData.File.CopyTo(fileStream);
+                    // asıl dosya kopyalamasının yapıldığı kısım.
+                }
+                // using içerisinde new'lenen fileStream nesnesi scope boyunca yaşar, scope bitiminde silinir.
+            }
+
+            if(formData.Id == 0) // Ekleme
+            {
+                var productAddDto = new ProductAddDto()
+                {
+                    Name = formData.Name,
+                    Description = formData.Description,
+                    UnitPrice = formData.UnitPrice,
+                    UnitsInStock = formData.UnitInStock,
+                    CategoryId = formData.CategoryId,
+                    ImagePath = newFileName
+                };
+
+                _productService.AddProduct(productAddDto);
+                return RedirectToAction("List");
+
+            }
+            else // Güncelleme
+            {
+                
             }
 
             return Ok();
