@@ -36,6 +36,10 @@ namespace ShopApp.Business.Managers
 
         public void DeleteCategory(int id)
         {
+            // TODO : Bu category ile eşleşen ürün var mı diye kontrol et, eğer ürün varsa silme işlemi yapılmalı, geriye FALSE dönülmeli ( system message ile hem false hem de hata mesajını dönebiliriz. )
+
+            // Eğer eşleşen ürün yoksa, işlem aynı şekilde repository'e taşınır ve category silinir.
+
             _categoryRepository.Delete(id);
         }
 

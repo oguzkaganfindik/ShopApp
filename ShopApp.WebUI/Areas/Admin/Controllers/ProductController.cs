@@ -138,10 +138,28 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
             }
             else // Güncelleme
             {
-                
-            }
+                var productUpdateDto = new ProductUpdateDto()
+                {
+                    Id = formData.Id,
+                    Name = formData.Name,
+                    Description = formData.Description,
+                    UnitPrice = formData.UnitPrice,
+                    UnitsInStock = formData.UnitInStock,
+                    CategoryId = formData.CategoryId,
+                    ImagePath = newFileName
 
-            return Ok();
+                };
+
+                _productService.UpdateProduct(productUpdateDto);
+                return RedirectToAction("List");
+            }
+        }
+
+        public IActionResult Delete(int id)
+        {
+            _productService.DeleteProduct(id);
+
+            return RedirectToAction("List");
         }
     }
 }

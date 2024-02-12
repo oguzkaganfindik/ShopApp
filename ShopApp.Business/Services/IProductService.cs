@@ -9,5 +9,9 @@ namespace ShopApp.Business.Services
         List<ProductListDto> GetProducts();
 
         ProductUpdateDto GetProductById(int id);
+
+        void UpdateProduct(ProductUpdateDto productUpdateDto);
+
+        void DeleteProduct(int id);
     }
 }
