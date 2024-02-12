@@ -29,6 +29,11 @@ namespace ShopApp.Business.Managers
             _productRepository.Add(entity);
         }
 
+        public void DeleteProduct(int id)
+        {
+            _productRepository.Delete(id);
+        }
+
         public ProductUpdateDto GetProductById(int id)
         {
             var entity = _productRepository.GetById(id);
@@ -63,6 +68,23 @@ namespace ShopApp.Business.Managers
             }).ToList();
 
             return productDtoList;
+        }
+
+        public void UpdateProduct(ProductUpdateDto productUpdateDto)
+        {
+            var entity = _productRepository.GetById(productUpdateDto.Id);
+
+            entity.Name = productUpdateDto.Name;
+            entity.Description = productUpdateDto.Description;
+            entity.UnitPrice = productUpdateDto.UnitPrice;
+            entity.UnitInStock = productUpdateDto.UnitsInStock;
+            entity.CategoryId = productUpdateDto.CategoryId;
+
+            if(productUpdateDto.ImagePath != "")
+            entity.ImagePath = productUpdateDto.ImagePath;
+            // Bu if'i yazmazsam, productUpdateDto ile View'den gelen boş olan string ImagePath bilgisi, veritabanındaki görsel üzerinde yazılır. Bu durumda görseli kaybederim.
+
+            _productRepository.Update(entity);
         }
     }
 }
