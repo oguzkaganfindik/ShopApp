@@ -12,7 +12,7 @@ namespace ShopApp.Data.Entities
 
         // null olabilen bir değer için configuration ile required(false) verilirse yeterlidir. ? kullanmaya gerek yok. (örnek -> string / description)
 
-        public int UnitInStock { get; set; }
+        public int UnitsInStock { get; set; }
         public string ImagePath { get; set; }
 
         public int CategoryId { get; set; }

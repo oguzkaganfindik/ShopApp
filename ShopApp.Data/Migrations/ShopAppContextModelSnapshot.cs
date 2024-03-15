@@ -84,11 +84,11 @@ namespace ShopApp.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UnitInStock")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UnitsInStock")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

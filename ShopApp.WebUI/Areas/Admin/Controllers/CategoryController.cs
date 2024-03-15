@@ -28,12 +28,44 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        public IActionResult New()
+        [HttpGet]
+        public IActionResult Create()
         {
             // Eğer ekleme ve güncelleme işlemleri için aynı formu kullanacaksak bu ayrım id üzerinden yapılacağından form mutlaka bir model ile açılmalı.
-            return View("Form", new CategoryFormViewModel());
+            return View("Create", new CategoryFormViewModel());
         }
 
+        [HttpPost]
+        public IActionResult Create(CategoryFormViewModel formData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", formData);
+            }
+
+            var categoryAddDto = new CategoryAddDto()
+            {
+                Name = formData.Name.Trim(),
+                Description = formData.Description?.Trim()
+            };
+
+            var result = _categoryService.AddCategory(categoryAddDto);
+
+            if (result)
+            {
+                return RedirectToAction("List");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Bu isimde bir kategori zaten mevcut.";
+                return View("Create", formData);
+
+                // View dönüyorsam ViewBag çalışır.
+                // RedirectToAction ile mesaj döneceksem TempData[..] kullanmalıyım.
+            }
+        }
+
+        [HttpGet]
         public IActionResult Update(int id)
         {
             var categoryDto = _categoryService.GetCategory(id);
@@ -45,66 +77,45 @@ namespace ShopApp.WebUI.Areas.Admin.Controllers
                 Description = categoryDto.Description
             };
 
-            return View("Form", viewModel);
+            return View("Update", viewModel);
         }
 
-
         [HttpPost]
-        public IActionResult Save(CategoryFormViewModel formData)
+        public IActionResult Update(CategoryFormViewModel formData)
         {
             if (!ModelState.IsValid)
             {
-                return View("Form", formData);
+                return View("Update", formData);
             }
 
-            if (formData.Id == 0) // Ekleme işlemi
+            var categoryUpdateDto = new CategoryUpdateDto()
             {
-                var categoryAddDto = new CategoryAddDto()
-                {
-                    Name = formData.Name.Trim(),
-                    Description = formData.Description?.Trim()
-                };
+                Id = formData.Id,
+                Name = formData.Name,
+                Description = formData.Description
+            };
 
-                var result = _categoryService.AddCategory(categoryAddDto);
+            var result = _categoryService.UpdateCategory(categoryUpdateDto);
 
-                if (result)
-                {
-                    return RedirectToAction("List");
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Bu isimde bir kategori zaten mevcut.";
-                    return View("Form", formData);
-
-                    // View dönüyorsam ViewBag çalışır.
-                    // RedirectToAction ile mesaj döneceksem TempData[..] kullanmalıyım.
-                }
-            }
-            else // Güncelleme işlemi
+            if (!result)
             {
-                var categoryUpdateDto = new CategoryUpdateDto()
-                {
-                    Id = formData.Id,
-                    Name = formData.Name,
-                    Description = formData.Description
-                };
-
-                var result = _categoryService.UpdateCategory(categoryUpdateDto);
-
-                if (!result)
-                {
-                    ViewBag.ErrorMessage = "Bu isimde bir kategori zaten mevcut olduğundan, güncelleme yapamazsınız.";
-                    return View("Form", formData);
-                }
-
-                return RedirectToAction("List");
+                ViewBag.ErrorMessage = "Bu isimde bir kategori zaten mevcut olduğundan, güncelleme yapamazsınız.";
+                return View("Update", formData);
             }
 
+            return RedirectToAction("List");
         }
+
+        [HttpGet]
         public IActionResult Delete(int id)
         {
-            _categoryService.DeleteCategory(id);
+            var result = _categoryService.DeleteCategory(id);
 
+            if (!result)
+            {
+                TempData["CategoryErrorMessage"] = "İlgili kategoride ürünler bulunduğundan silme işlemi gerçekleştirilemez.";
+
+            }
             return RedirectToAction("List");
         }
     }

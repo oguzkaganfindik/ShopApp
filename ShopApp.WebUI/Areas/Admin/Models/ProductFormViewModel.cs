@@ -17,7 +17,7 @@ namespace ShopApp.WebUI.Areas.Admin.Models
         public decimal? UnitPrice { get; set; }
 
         [Display(Name = "Stok Miktarı")]
-        public int UnitInStock { get; set; }
+        public int UnitsInStock { get; set; }
 
         [Display(Name = "Kategori")]
         [Required(ErrorMessage = "Bir kategori seçmek zorunludur.")]
