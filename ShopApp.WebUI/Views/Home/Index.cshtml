@@ -4,3 +4,19 @@
         Güvenli alışverişin adresi
     </p>
 </div>
+
+<div class="row mt-5">
+    <div class="col-3">
+
+        <vc:categories></vc:categories>
+
+    </div>
+
+    <div class="col-9">
+
+        @* TODO: Ürün kartları gösterilecek *@
+        <vc:products category-id="@ViewBag.CategoryId"></vc:products>
+
+    </div>
+
+</div>

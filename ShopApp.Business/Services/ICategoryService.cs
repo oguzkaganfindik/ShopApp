@@ -8,6 +8,6 @@ namespace ShopApp.Business.Services
         List<CategoryListDto> GetCategories();
         CategoryUpdateDto GetCategory(int id);
         bool UpdateCategory(CategoryUpdateDto categoryUpdateDto);
-        void DeleteCategory(int id);
+        bool DeleteCategory(int id);
     }
 }

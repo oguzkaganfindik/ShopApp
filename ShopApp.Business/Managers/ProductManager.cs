@@ -21,7 +21,7 @@ namespace ShopApp.Business.Managers
                 Name = productAddDto.Name,
                 Description = productAddDto.Description,
                 UnitPrice = productAddDto.UnitPrice,
-                UnitInStock = productAddDto.UnitsInStock,
+                UnitsInStock = productAddDto.UnitsInStock,
                 CategoryId = productAddDto.CategoryId,
                 ImagePath = productAddDto.ImagePath,
             };
@@ -44,7 +44,7 @@ namespace ShopApp.Business.Managers
                 Name = entity.Name,
                 Description = entity.Description,
                 UnitPrice = entity.UnitPrice,
-                UnitsInStock = entity.UnitInStock,
+                UnitsInStock = entity.UnitsInStock,
                 CategoryId = entity.CategoryId,
                 ImagePath = entity.ImagePath,
             };
@@ -62,12 +62,37 @@ namespace ShopApp.Business.Managers
                 Id = x.Id,
                 Name = x.Name,
                 UnitPrice = x.UnitPrice,
-                UnitInStock = x.UnitInStock,
+                UnitsInStock = x.UnitsInStock,
                 CategoryName = x.Category.Name,
                 ImagePath = x.ImagePath,
             }).ToList();
 
             return productDtoList;
+        }
+
+        public List<ProductListDto> GetProductsByCategoryId(int? categoryId = null)
+        {
+            if (categoryId.HasValue) // is not null
+            {
+                var productEntities = _productRepository.GetAll(x => x.CategoryId == categoryId).OrderBy(x => x.Name);
+                // Gönderdiğim categoryId ile entity'deki categoryId'si eşleşen ürünleri isimlerine göre sıralayarak getir.
+
+                var productDtos = productEntities.Select(x => new ProductListDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UnitPrice = x.UnitPrice,
+                    UnitsInStock = x.UnitsInStock,
+                    CategoryName = x.Category.Name,
+                    ImagePath = x.ImagePath
+                }).ToList();
+
+                return productDtos;
+            }
+
+            return GetProducts(); // Aynı işlemler yapılacağından direkt diğer metoda yönlendiriyorum.
+
+
         }
 
         public void UpdateProduct(ProductUpdateDto productUpdateDto)
@@ -77,7 +102,7 @@ namespace ShopApp.Business.Managers
             entity.Name = productUpdateDto.Name;
             entity.Description = productUpdateDto.Description;
             entity.UnitPrice = productUpdateDto.UnitPrice;
-            entity.UnitInStock = productUpdateDto.UnitsInStock;
+            entity.UnitsInStock = productUpdateDto.UnitsInStock;
             entity.CategoryId = productUpdateDto.CategoryId;
 
             if(productUpdateDto.ImagePath != "")

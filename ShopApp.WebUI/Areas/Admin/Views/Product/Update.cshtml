@@ -19,7 +19,7 @@
 
             <div class="card-body">
 
-                <form method="post" asp-controller="Product" asp-action="Save" enctype="multipart/form-data">
+                <form method="post" asp-controller="Product" asp-action="Update" enctype="multipart/form-data">
                    @*  Dosya Taşıyorsan, enctype eklemelisin! - File kısmını formdan ayrı bir part olarak görmesini istiyorsun. Aksi taktirde formu taşımaz.*@
 
                     @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
@@ -51,9 +51,9 @@
                     </div>
 
                     <div class="mb-2">
-                        <label asp-for="UnitInStock"></label>
-                        <input type="number" asp-for="UnitInStock" class="form-control" />
-                        <span class="text-danger fw-bold mt-1" asp-validation-for="UnitInStock"></span>
+                        <label asp-for="UnitsInStock"></label>
+                        <input type="number" asp-for="UnitsInStock" class="form-control" />
+                        <span class="text-danger fw-bold mt-1" asp-validation-for="UnitsInStock"></span>
                     </div>
 
                     <div class="mb-2">

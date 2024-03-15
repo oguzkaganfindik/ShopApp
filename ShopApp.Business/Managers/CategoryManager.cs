@@ -8,10 +8,12 @@ namespace ShopApp.Business.Managers
     public class CategoryManager : ICategoryService
     {
         private readonly IRepository<CategoryEntity> _categoryRepository;
+        private readonly IRepository<ProductEntity> _productRepository;
 
-        public CategoryManager(IRepository<CategoryEntity> categoryRepository)
+        public CategoryManager(IRepository<CategoryEntity> categoryRepository, IRepository<ProductEntity> productRepository)
         {
             _categoryRepository = categoryRepository;
+            _productRepository = productRepository;
         }
 
         public bool AddCategory(CategoryAddDto categoryAddDto)
@@ -34,13 +36,18 @@ namespace ShopApp.Business.Managers
             return true;
         }
 
-        public void DeleteCategory(int id)
+        public bool DeleteCategory(int id)
         {
-            // TODO : Bu category ile eşleşen ürün var mı diye kontrol et, eğer ürün varsa silme işlemi yapılmalı, geriye FALSE dönülmeli ( system message ile hem false hem de hata mesajını dönebiliriz. )
+            var firstProduct = _productRepository.Get(x => x.CategoryId == id);
 
-            // Eğer eşleşen ürün yoksa, işlem aynı şekilde repository'e taşınır ve category silinir.
+            if (firstProduct is not null)
+            {
+                return false;
+                //silme işlemi yapılamaz, içerisinde en az 1 ürün var.
+            }
 
             _categoryRepository.Delete(id);
+            return true;
         }
 
         public List<CategoryListDto> GetCategories()

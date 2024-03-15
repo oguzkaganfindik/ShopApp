@@ -13,5 +13,7 @@ namespace ShopApp.Business.Services
         void UpdateProduct(ProductUpdateDto productUpdateDto);
 
         void DeleteProduct(int id);
+
+        List<ProductListDto> GetProductsByCategoryId(int? categoryId = null);
     }
 }
