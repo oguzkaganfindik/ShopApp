@@ -24,19 +24,26 @@ builder.Services.AddScoped<IImageService, ImageManager>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
-    options.LoginPath = new PathString("/");
-    options.LogoutPath = new PathString("/");
-    options.AccessDeniedPath = new PathString("/");
+    options.LoginPath = new PathString("/GirisYap");
+    options.LogoutPath = new PathString("/CikisYap");
+    options.AccessDeniedPath = new PathString("/Errors/Error403");
     // giriþ - çýkýþ - eriþim engeli durumlarýnda yönlendirilecek olan adresler.
 });
 
+// TODO : AccessDeniedPath sorunu çözülecek, 403 sayfasý için
+
 var app = builder.Build();
 
+//app.UseHttpsRedirection();
+
 app.UseStaticFiles(); // wwwroot için
+
+app.UseStatusCodePagesWithRedirects("/Errors/Error{0}");
 
 app.UseAuthentication();
 app.UseAuthorization();
 // Auth iþlemleri yapýyorsam, üstteki 2 satýr yazýlmalý. Yoksa hata vermez fakat oturum açmaz, yetkilendirme sorgulayamaz.
+
 
 
 // AREA için yazýlan ROUTE her zaman Default'un üzerinde olmalý.

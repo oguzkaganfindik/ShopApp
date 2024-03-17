@@ -59,7 +59,15 @@ namespace ShopApp.WebUI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GirisYap")]
+        public IActionResult Login()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [Route("GirisYap")]
         public async Task<IActionResult> Login(LoginViewModel formData)
         {
             if(!ModelState.IsValid) 
@@ -109,6 +117,8 @@ namespace ShopApp.WebUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [Route("CikisYap")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
