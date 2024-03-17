@@ -45,7 +45,7 @@ namespace ShopApp.Business.Managers
                     filePath = Path.Combine(wwwrootFolderPath, newFileName);
 
                     // Resmi boyutlandırma
-                    _imageProcessingService.ResizeImage(formFile.OpenReadStream(), filePath, 1200, 1200);
+                    _imageProcessingService.ResizeImage(formFile.OpenReadStream(), filePath, 1800, 1200);
                 }
             }
 
