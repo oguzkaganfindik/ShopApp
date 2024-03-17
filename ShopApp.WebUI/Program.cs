@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.Business.Managers;
 using ShopApp.Business.Services;
@@ -31,6 +32,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 // TODO : AccessDeniedPath sorunu çözülecek, 403 sayfasý için
+
+var contentrootPath = builder.Environment.ContentRootPath;
+
+var keysDirectory = new DirectoryInfo(Path.Combine(contentrootPath, "App_Data", "Keys"));
+
+builder.Services.AddDataProtection()
+    .SetApplicationName("ShopApp")
+    .SetDefaultKeyLifetime(new TimeSpan(99999, 0, 0))
+    .PersistKeysToFileSystem(keysDirectory);
+
+// App_Data -> Keys -> içerisindeki xml dosyasýna sahip her proje ayný þifreleme/þifre açma yöntemi kullanacaðýndan, birbirlerinin þifrelerini açabilirler.
+
 
 var app = builder.Build();
 
