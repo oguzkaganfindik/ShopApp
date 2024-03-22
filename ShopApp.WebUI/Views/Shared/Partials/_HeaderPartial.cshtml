@@ -1,0 +1,47 @@
+﻿<header class="p-3 text-bg-dark">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none fw-bold">
+                Shop App
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            </ul>
+
+            <div id="login" class="d-none">
+                @*display:none*@
+                <partial name="Partials/_LoginPartial" model="new LoginViewModel()" />
+                @* Eğer Partial View bir model alıyorsa, mutlaka boş bir modelle açılmalı. Aksi taktirde RenderBody'e gönderilen modeller buraya gönderilmiş gibi düşünülüp eşleşmeme hatası alınabilir. *@
+            </div>
+
+            @if (!User.IsLogged())
+            {
+                <div id="welcome">
+                    <partial name="Partials/_WelcomePartial" />
+                </div>
+            }
+            else
+            {
+                var firstName = User.GetUserFirstName();
+                var lastName = User.GetUserLastName();
+
+                <div class="d-flex">
+
+                    @if (User.IsAdmin())
+                    {
+                        <div class="ms-3 me-3">
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn" id="AdminPanelLink">Yönetim Paneli</a>
+                        </div>
+                    }
+
+                    <div class="fw-bold fst-italic mt-2">
+                        Hoş Geldin @firstName @lastName
+                    </div>
+
+                    <a asp-controller="Auth" asp-action="Logout" class="btn btn-outline-warning ms-3 fw-bold">Çıkış Yap</a>
+                </div>
+            }
+
+        </div>
+    </div>
+</header>
