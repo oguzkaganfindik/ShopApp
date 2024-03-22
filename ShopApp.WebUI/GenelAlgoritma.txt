@@ -95,3 +95,7 @@
         //        return RedirectToAction("List");
         //    }
         //}
+
+
+        
+        https://medium.com/software-development-turkey/abstract-class-ve-interface-aras%C4%B1ndaki-farklar-nelerdir-3c0a4f956eba

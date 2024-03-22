@@ -60,3 +60,9 @@ namespace ShopApp.Data.Repositories
         }
     }
 }
+
+// Find: Id parametresi ile nesne varsa hemen yakalar. En az performans harcayan yöntemdir.
+// First: Eşleşen ilk veriyi buluyor. Eğer arananı bulamazsa hata fırlatır.
+// FirstOrDefault: İlk veriyi bulur. Bulamazsa null döner.
+// Single: İlk veriyi bulur. Başka veriyi bulursa hata fırlatır.
+// SingleOrDefault: İlk veriyi bulur. Bulamazsa null döner. Birden fazla veri bulursa hata fırlatır.
